@@ -7,7 +7,7 @@
 
 using namespace simple_fft::fft_test;
 
-int main()
+int nothing()
 {
 #ifdef __USE_OPENMP
     omp_set_dynamic(0);

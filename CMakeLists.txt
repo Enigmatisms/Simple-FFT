@@ -24,20 +24,21 @@ set(HEADERS_UNIT_TESTS
 set(SOURCES_UNIT_TESTS
         unit-tests/unit_tests_main.cpp
         unit-tests/test_fft.cpp
+        unit-tests/simpler_test.cc
         unit-tests/test_with_std_vectors.cpp
         unit-tests/test_with_native_cpp_pointer_based_arrays.cpp
    )
 
-set(HEADERS_BENCHMARK_TESTS
-        ${HEADERS}
-        benchmark-tests/benchmark_tests_fftw3.h
-        unit-tests/test_fft.cpp
-    )
+# set(HEADERS_BENCHMARK_TESTS
+#         ${HEADERS}
+#         benchmark-tests/benchmark_tests_fftw3.h
+#         unit-tests/test_fft.cpp
+#     )
 
-set(SOURCES_BENCHMARK_TESTS
-        benchmark-tests/benchmark_tests_fftw3.cpp
-        benchmark-tests/benchmark_tests_main.cpp
-    )
+# set(SOURCES_BENCHMARK_TESTS
+#         benchmark-tests/benchmark_tests_fftw3.cpp
+#         benchmark-tests/benchmark_tests_main.cpp
+#     )
    
 # Boost section
 find_package(Boost QUIET)
@@ -181,8 +182,9 @@ else()
     message(STATUS "FFTW include file was not found, won't build a benchmark test")
 endif()
 
+add_definitions(-D__USE_SQUARE_BRACKETS_FOR_ELEMENT_ACCESS_OPERATOR)
 add_executable(${UNIT_TESTS} ${HEADERS_UNIT_TESTS} ${SOURCES_UNIT_TESTS})
-add_executable(${BENCHMARK_TESTS} ${HEADERS_BENCHMARK_TESTS} ${SOURCES_BENCHMARK_TESTS})
+# add_executable(${BENCHMARK_TESTS} ${HEADERS_BENCHMARK_TESTS} ${SOURCES_BENCHMARK_TESTS})
 
 if(FFTW_LIB)
     target_link_libraries(${BENCHMARK_TESTS} ${FFTW_LIB})
@@ -231,7 +233,7 @@ else() # not clang
                          )
             set(LIBS ${LIBS} ${omp5_lib})
             target_link_libraries(${UNIT_TESTS} ${omp5_lib})
-            target_link_libraries(${BENCHMARK_TESTS} ${omp5_lib})
+            # target_link_libraries(${BENCHMARK_TESTS} ${omp5_lib})
         endif() # OpenMP
         if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
             set(CMAKE_CXX_FLAGS "-debug -Wall -Werror -Winline -Wdeprecated -Wno-missing-prototypes ${CMAKE_CXX_FLAGS}")
